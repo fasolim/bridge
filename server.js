@@ -3,9 +3,13 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+const { getPromptForStrategy, getStrategyInfo, listStrategies } = require('./prompt-templates');
 
 const app = express();
 app.use(express.json());
+
+// Servir arquivos estáticos da interface web
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuração
 const TASKS_DIR = path.join(__dirname, 'tasks');
@@ -17,12 +21,11 @@ if (!fs.existsSync(TASKS_DIR)) fs.mkdirSync(TASKS_DIR);
 if (!fs.existsSync(RESULTS_DIR)) fs.mkdirSync(RESULTS_DIR);
 if (!fs.existsSync(PROJECTS_DIR)) fs.mkdirSync(PROJECTS_DIR);
 
-// Helper: Busca projeto/subprojeto na pasta projects/
-function findProjectPath(projectName, subProject) {
+// Helper: Busca projeto na pasta projects/
+function findProjectPath(projectName) {
   if (!projectName) return null;
   
   const cleanName = projectName.toLowerCase().trim();
-  const cleanSub = subProject ? subProject.toLowerCase().trim() : null;
   
   // Lista projetos principais
   const mainProjects = fs.readdirSync(PROJECTS_DIR)
@@ -33,34 +36,11 @@ function findProjectPath(projectName, subProject) {
   
   if (!mainFound) return null;
   
-  const mainPath = path.join(PROJECTS_DIR, mainFound);
-  
-  // Se não tem subprojeto, retorna o principal
-  if (!cleanSub) return mainPath;
-  
-  // Busca subprojeto dentro do principal
-  try {
-    const subProjects = fs.readdirSync(mainPath)
-      .filter(f => fs.statSync(path.join(mainPath, f)).isDirectory());
-    
-    const subFound = subProjects.find(s => 
-      s.toLowerCase() === cleanSub || 
-      s.toLowerCase().includes(cleanSub) ||
-      (cleanSub.includes('front') && s.toLowerCase().includes('front')) ||
-      (cleanSub.includes('back') && s.toLowerCase().includes('back'))
-    );
-    
-    if (subFound) return path.join(mainPath, subFound);
-  } catch (err) {
-    console.log('⚠️ Erro ao buscar subprojeto:', err.message);
-  }
-  
-  // Se não encontrou subprojeto, retorna o principal
-  return mainPath;
+  return path.join(PROJECTS_DIR, mainFound);
 }
 
 // Helper: Abre arquivo no Cursor e envia automaticamente para o chat
-async function openInCursor(filePath) {
+async function openInCursor(filePath, strategy = 'todos-pendentes') {
   return new Promise((resolve) => {
     const cursorCommand = `cursor "${filePath}"`;
     
@@ -75,7 +55,11 @@ async function openInCursor(filePath) {
         
         // Aguarda 3 segundos para o Cursor carregar
         setTimeout(() => {
-          const chatMessage = `Busque todos os bugs com Status 'Reprovado' e os  no database do Notion. Para cada bug: analise o problema, implemente a solução no código tanto back quanto front se necessário, faça commit no GitHub com mensagem 'fix: [título do bug]', e atualize o status do bug para 'Pronto para teste' no Notion com a solução implementada e o hash do commit. ${path.basename(filePath)}. Não peça confirmação, apenas execute agora de forma autônoma e completa.`;
+          // Mensagem de chat ajustada para mencionar a estratégia
+          const strategyInfo = getStrategyInfo(strategy);
+          const strategyName = strategyInfo ? strategyInfo.name : strategy;
+          
+          const chatMessage = `Execute as instruções do arquivo ${path.basename(filePath)} usando a estratégia "${strategyName}". Não peça confirmação, apenas execute agora de forma autônoma e completa seguindo todas as etapas definidas.`;
           
           // Tenta enviar via PowerShell
           const psScript = path.join(__dirname, 'auto-chat.ps1');
@@ -169,11 +153,7 @@ ${taskContent.instructions}
 
 ---
 
-## 💬 MENSAGEM AUTOMÁTICA PARA O CURSOR AI
 
-**Busque todos os bugs com Status 'Reprovado' e os  no database do Notion. Para cada bug: analise o problema, implemente a solução no código tanto back quanto front se necessário, faça commit no GitHub com mensagem 'fix: [título do bug]', e atualize o status do bug para 'Pronto para teste' no Notion com a solução implementada e o hash do commit.**
-
-**Não peça confirmação. Apenas execute agora.**
 
 ---`;
 
@@ -189,9 +169,24 @@ ${taskContent.instructions}
   return { taskId, taskFile, instructionFile };
 }
 
-// Gera as instruções completas para o Cursor executar
+// Gera as instruções completas para o Cursor executar usando templates dinâmicos
 function generateInstructions(data) {
-  const { notionDatabaseUrl, projectPath, projectContext, githubRepo, autoCommit } = data;
+  const strategy = data.strategy || 'todos-pendentes';
+  
+  try {
+    // Usa o sistema de templates para gerar o prompt específico da estratégia
+    const prompt = getPromptForStrategy(strategy, data);
+    return prompt;
+  } catch (error) {
+    console.error('❌ Erro ao gerar prompt:', error);
+    // Fallback para prompt genérico
+    return generateFallbackPrompt(data);
+  }
+}
+
+// Prompt de fallback caso haja erro no sistema de templates
+function generateFallbackPrompt(data) {
+  const { notionDatabaseUrl, projectPath, githubRepo, autoCommit } = data;
   
   return `# 🤖 TAREFA AUTOMÁTICA - BUG RESOLVER
 
@@ -203,8 +198,12 @@ function generateInstructions(data) {
 ## 📋 CONTEXTO DO PROJETO
 
 **Projeto**: ${projectPath}
-**Tipo**: ${projectContext || 'Não especificado'}
 ${githubRepo ? `**Repositório**: ${githubRepo}` : ''}
+
+**IMPORTANTE**: 
+- Você DEVE usar o MCP do Notion para interagir com o database de bugs
+- Consulte a pasta \`Docs\` dentro do projeto para entender a arquitetura e padrões
+- Se não conseguir extrair todo o conteúdo do card, prossiga com o que conseguiu obter
 
 ---
 
@@ -214,86 +213,23 @@ Você deve executar automaticamente os seguintes passos:
 
 ### PASSO 1: Buscar Bugs no Notion
 
-Use o MCP do Notion para buscar todos os bugs com status "Pendente" no banco de dados:
+Use o MCP do Notion para buscar bugs pendentes no banco de dados:
 
 \`\`\`
 Database URL: ${notionDatabaseUrl}
 \`\`\`
 
-**Comando para você executar:**
-- Use a ferramenta \`mcp_Notion_notion-search\` ou \`mcp_Notion_notion-fetch\`
-- Busque por páginas com status = "Pendente"
-- Extraia: ID, Nome, Descrição, Prioridade
-
 ### PASSO 2: Para Cada Bug Encontrado
 
-Para cada bug pendente, execute:
-
-#### 2.1. Análise do Bug
-- Leia a descrição completa
-- Identifique o tipo de problema
-- Determine quais arquivos podem estar envolvidos
-
-#### 2.2. Busca no Código
-- Navegue até: \`${projectPath}\`
-- Use \`codebase_search\` para encontrar código relacionado
-- Identifique o arquivo e linha com problema
-
-#### 2.3. Implementação da Correção
-- Abra o arquivo problemático
-- Analise o código atual
-- Implemente a correção adequada
-- Garanta que segue as boas práticas
-- NÃO quebre funcionalidades existentes
-
-#### 2.4. Validação
-- Se houver testes, execute-os
-- Verifique se a correção resolve o bug
-- Confirme que não criou novos problemas
-
-${autoCommit !== false ? `
-#### 2.5. Commit (Automático)
-- Faça commit das alterações com mensagem clara:
-  - Formato: \`fix: [nome do bug]\`
-  - Body: descrição da correção implementada
-- Se configurado, faça push para o repositório
-` : ''}
-
-#### 2.6. Atualização no Notion
-- Use o MCP do Notion para atualizar o bug
-- Altere o status para "Resolvido"
-- Adicione um comentário com:
-  - Descrição da correção
-  - Arquivos alterados
-  ${autoCommit !== false ? '- Hash do commit' : ''}
+Execute o fluxo completo de resolução seguindo a arquitetura documentada no projeto.
 
 ### PASSO 3: Relatório Final
 
-Crie um arquivo em \`results/relatorio-${Date.now()}.md\` com:
-- Total de bugs processados
-- Lista de bugs resolvidos
-- Arquivos alterados
-- Commits feitos (se houver)
-- Bugs que não puderam ser resolvidos (com motivo)
-
----
-
-## ⚠️ REGRAS IMPORTANTES
-
-1. **SEMPRE** analise o código antes de fazer alterações
-2. **NUNCA** delete código sem entender sua função
-3. **SEMPRE** mantenha o estilo de código do projeto
-4. **NUNCA** faça commit se os testes falharem
-5. **SEMPRE** atualize o Notion após resolver um bug
-6. **SE** não conseguir resolver um bug, marque como "Em Análise" e adicione comentário explicando o bloqueio
+Crie um arquivo em \`results/relatorio-${Date.now()}.md\`.
 
 ---
 
 ## 🚀 EXECUTE AGORA
-
-**IMPORTANTE**: Você deve começar a executar IMEDIATAMENTE após ler este arquivo.
-
-Não peça confirmação, não espere aprovação. Execute de forma autônoma e completa.
 
 Boa sorte! 🎯
 `;
@@ -310,10 +246,10 @@ async function processBugResolverRequest(requestData) {
     notionDatabaseUrl,
     projectPath,
     projectName,
-    subProject,
-    projectContext,
     githubRepo,
-    autoCommit = true
+    autoCommit = true,
+    strategy = 'todos-pendentes',
+    customFilter = null
   } = requestData;
   
   // Validações
@@ -323,10 +259,10 @@ async function processBugResolverRequest(requestData) {
   
   // Se não passou projectPath, tenta buscar pelo nome
   if (!projectPath && projectName) {
-    projectPath = findProjectPath(projectName, subProject);
+    projectPath = findProjectPath(projectName);
     if (!projectPath) {
       const available = listAvailableProjects();
-      throw new Error(`Projeto "${projectName}${subProject ? '/' + subProject : ''}" não encontrado. Disponíveis: ${available.map(p => p.name).join(', ')}`);
+      throw new Error(`Projeto "${projectName}" não encontrado. Disponíveis: ${available.map(p => p.name).join(', ')}`);
     }
     console.log(`✅ Projeto encontrado: ${projectPath}`);
   }
@@ -336,12 +272,16 @@ async function processBugResolverRequest(requestData) {
     throw new Error(`projectPath ou projectName é obrigatório. Projetos disponíveis: ${available.map(p => p.name).join(', ')}`);
   }
   
+  // Obtém informações sobre a estratégia
+  const strategyInfo = getStrategyInfo(strategy);
+  
   console.log('📋 Configuração recebida:');
   console.log(`   📊 Notion Database: ${notionDatabaseUrl}`);
   console.log(`   📁 Projeto: ${projectPath}`);
-  console.log(`   💡 Contexto: ${projectContext || 'Não especificado'}`);
+  console.log(`   🎯 Estratégia: ${strategyInfo ? strategyInfo.name : strategy}`);
   console.log(`   🔄 Auto Commit: ${autoCommit ? 'Sim' : 'Não'}`);
   if (githubRepo) console.log(`   🌐 GitHub: ${githubRepo}`);
+  if (customFilter) console.log(`   🔍 Filtro Customizado: ${customFilter}`);
   
   // Cria arquivo de tarefa
   console.log('\n📝 Criando tarefa para execução automática...\n');
@@ -350,8 +290,8 @@ async function processBugResolverRequest(requestData) {
   console.log('✅ Tarefa criada com sucesso!');
   console.log('\n🤖 Abrindo automaticamente no Cursor...\n');
   
-  // Tenta abrir automaticamente no Cursor
-  const opened = await openInCursor(task.instructionFile);
+  // Tenta abrir automaticamente no Cursor passando a estratégia
+  const opened = await openInCursor(task.instructionFile, strategy);
   
   return {
     success: true,
@@ -383,10 +323,10 @@ app.post('/api/bug-resolver', async (req, res) => {
       notionDatabaseUrl: req.body.notionDatabaseUrl || req.body.databaseUrl,
       projectPath: req.body.projectPath,
       projectName: req.body.projectName,
-      subProject: req.body.subProject,
-      projectContext: req.body.projectContext || req.body.prompt,
       githubRepo: req.body.githubRepo,
-      autoCommit: req.body.autoCommit !== false
+      autoCommit: req.body.autoCommit !== false,
+      strategy: req.body.strategy || 'todos-pendentes',
+      customFilter: req.body.customFilter || null
     };
     
     const result = await processBugResolverRequest(requestData);
@@ -460,6 +400,24 @@ app.get('/api/projects', (req, res) => {
       success: true,
       total: projects.length,
       projects: projects
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Endpoint para listar estratégias disponíveis
+app.get('/api/strategies', (req, res) => {
+  try {
+    const strategies = listStrategies();
+    
+    res.json({
+      success: true,
+      total: strategies.length,
+      strategies: strategies
     });
   } catch (error) {
     res.status(500).json({

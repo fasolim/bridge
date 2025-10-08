@@ -2,6 +2,23 @@
 
 Ponte automática entre Notion e projetos locais via Cursor AI.
 
+## ✨ NOVIDADE: Interface Web!
+
+**Agora com interface visual completa!** Não precisa mais usar Postman! 🎉
+
+Acesse: `http://localhost:3001` após iniciar o servidor.
+
+### 🎯 6 Estratégias de Resolução:
+- 🚀 **Bugs Não Iniciados** - Começa bugs novos do zero
+- 🔄 **Bugs Reprovados** - Retrabalha bugs rejeitados
+- ⚡ **Em Andamento** - Finaliza bugs iniciados
+- 🔥 **Alta Prioridade** - Foca em bugs críticos
+- 📋 **Todos Pendentes** - Limpa o backlog completo
+- ⚙️ **Personalizado** - Filtros customizados
+
+**👉 Guia rápido:** [QUICK-START.md](./QUICK-START.md)  
+**📖 Documentação completa:** [INTERFACE-WEB.md](./INTERFACE-WEB.md)
+
 ## Setup
 
 ### Local
@@ -61,30 +78,39 @@ bridge/
 
 ## API
 
-**POST /api/bug-resolver**
+### Interface Web (NOVO! 🎉)
+**Acesse:** `http://localhost:3001`
 
-Exemplo simples (só projeto principal):
-```json
-{
-  "notionDatabaseUrl": "https://notion.so/...",
-  "projectName": "syntra",
-  "projectContext": "Sistema de gestão"
-}
-```
+Interface visual completa com seletor de estratégias e configuração facilitada!
 
-Exemplo com subprojeto (backend ou frontend):
+### Endpoints REST
+
+**POST /api/bug-resolver** - Inicia resolução de bugs
+
+Exemplo com estratégia:
 ```json
 {
   "notionDatabaseUrl": "https://notion.so/...",
   "projectName": "syntra",
   "subProject": "back",
-  "projectContext": "Backend NestJS"
+  "projectContext": "Backend NestJS",
+  "strategy": "nao-iniciado",
+  "autoCommit": true
 }
 ```
 
 **GET /api/projects** - Lista projetos e subprojetos  
-**GET /api/tasks** - Lista tarefas  
-**GET /api/results** - Lista relatórios
+**GET /api/strategies** - Lista estratégias disponíveis (NOVO!)  
+**GET /api/tasks** - Lista tarefas executadas  
+**GET /api/results** - Lista relatórios gerados
+
+### Estratégias Disponíveis:
+- `nao-iniciado` - Bugs não iniciados
+- `reprovado` - Bugs reprovados
+- `em-andamento` - Bugs em andamento
+- `prioridade-alta` - Apenas bugs críticos/altos
+- `todos-pendentes` - Todos não concluídos
+- `custom` - Filtro personalizado (requer `customFilter`)
 
 ## Fluxo
 
