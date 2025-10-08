@@ -1,0 +1,9 @@
+{
+  "notionDatabaseUrl": "https://www.notion.so/seu-workspace/database-id",
+  "projectName": "syntra",
+  "subProject": "back",
+  "projectContext": "Backend NestJS com TypeORM e PostgreSQL",
+  "githubRepo": "https://github.com/user/syntra",
+  "autoCommit": false
+}
+

@@ -1,0 +1,10 @@
+node_modules/
+.env
+tasks/*.json
+tasks/*.md
+results/*.md
+.processed-tasks.json
+projects/*
+!projects/README.md
+*.log
+test-request.json

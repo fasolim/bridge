@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  bridge:
+    build: .
+    container_name: bridge-api
+    ports:
+      - "3001:3001"  # Expõe na rede local automaticamente (0.0.0.0:3001)
+    environment:
+      - PORT=3001
+      - HOST=0.0.0.0  # Aceita conexões de qualquer IP na rede
+      - NOTION_TOKEN=${NOTION_TOKEN}
+    volumes:
+      - ./projects:/app/projects
+      - ./tasks:/app/tasks
+      - ./results:/app/results
+    restart: unless-stopped
+    network_mode: bridge  # Permite acesso da rede local
+
+  # Descomentar se quiser N8N junto
+  # n8n:
+  #   image: n8nio/n8n
+  #   container_name: n8n
+  #   ports:
+  #     - "5678:5678"
+  #   environment:
+  #     - N8N_BASIC_AUTH_ACTIVE=true
+  #     - N8N_BASIC_AUTH_USER=admin
+  #     - N8N_BASIC_AUTH_PASSWORD=admin
+  #   volumes:
+  #     - n8n_data:/home/node/.n8n
+  #   restart: unless-stopped
+
+# volumes:
+#   n8n_data:
+
