@@ -118,23 +118,55 @@ Execute o fluxo completo de resolução:
 - Valide que seguiu os padrões dos Docs
 
 ${data.autoCommit !== false ? `
-#### 3.7. Commit no GitHub
-- Crie uma nova branch: \`fix/[nome-do-bug-sem-espacos]\`
-- Faça commit das alterações:
-  * Formato: \`fix: [nome do bug]\`
-  * Body: descrição detalhada da correção implementada
-  * Footer: \`Closes #[issue-number]\` (se aplicável)
-- Push para o repositório
+#### 3.7. Automação Git/GitHub (OBRIGATÓRIO)
+
+**🚨 ATENÇÃO CRÍTICA**: Você DEVE usar EXCLUSIVAMENTE o MCP do GitHub para automatizar completamente o fluxo Git. NÃO use comandos git do terminal!
+
+**COMANDOS MCP GITHUB OBRIGATÓRIOS:**
+
+1. **Criar Branch de Fix:**
+   - Use: \`mcp_github_create_branch\`
+   - Nome da branch: \`fix/[nome-do-bug-kebab-case]\`
+   - Base: \`main\` ou \`develop\`
+
+2. **Commit das Alterações:**
+   - Use: \`mcp_github_create_commit\`
+   - Mensagem: \`fix: [nome do bug resumido]\`
+   - Descrição detalhada da correção
+   - Lista de arquivos modificados
+
+3. **Push para Repositório:**
+   - Use: \`mcp_github_push\`
+   - Push da branch para o repositório remoto
+
+4. **Criar Pull Request Automático:**
+   - Use: \`mcp_github_create_pull_request\`
+   - Título: \`fix: [nome do bug]\`
+   - Body com descrição completa do bug e solução
+   - Labels: \`["bug", "auto-fix"]\`
+   - Base: \`main\`, Head: \`fix/[nome-do-bug]\`
+
+**❌ PROIBIDO:**
+- Usar comandos \`git\` do terminal
+- Fazer commits manuais
+- Criar branches manualmente
+- Abrir PRs manualmente no GitHub
+
+**✅ OBRIGATÓRIO:**
+- Usar APENAS comandos MCP do GitHub
+- Criar PR automaticamente após cada correção
+- Incluir link do PR no comentário do Notion
 ` : ''}
 
-#### 3.8. Atualização no Notion
-**OBRIGATÓRIO**: Use o MCP do Notion (\`mcp_Notion_notion-update-page\`):
-- Altere o status para **"Pronto para Teste"**
+#### 3.8. Atualização no Notion (CRÍTICO - NÃO PULE ESTA ETAPA)
+**🚨 OBRIGATÓRIO - MUDANÇA DE STATUS É CRÍTICA**: Use o MCP do Notion (\`mcp_Notion_notion-update-page\`):
+- **MUDE OBRIGATORIAMENTE** o status para **"Pronto para Teste"**
+- **NÃO PULE** esta etapa - é essencial para o fluxo de trabalho
 - Use \`mcp_Notion_notion-create-comment\` para adicionar comentário detalhado:
   * ✅ Descrição da correção implementada
   * 📁 Arquivos alterados (caminho completo)
   * 📐 Padrões dos Docs que foram seguidos
-  ${data.autoCommit !== false ? '* 🔗 Nome da branch criada\n  * 📝 Hash do commit' : ''}
+  ${data.autoCommit !== false ? '* 🔗 Nome da branch criada\n  * 📝 Hash do commit\n  * 🚀 **LINK DO PULL REQUEST**: [URL do PR criado via MCP GitHub]' : ''}
   * ⚠️ Pontos de atenção para o teste
 
 ### PASSO 4: Relatório Final
@@ -179,21 +211,27 @@ ${data.autoCommit !== false ? '- **Branch**: [nome-branch]\n- **Commit**: [hash]
 ## ⚠️ REGRAS IMPORTANTES
 
 1. **MCP DO NOTION É OBRIGATÓRIO**: Use SEMPRE os comandos MCP para interagir com o Notion
-2. **DOCS DO PROJETO SÃO LEI**: Consulte os Docs ANTES de qualquer alteração e siga RIGOROSAMENTE
-3. **SEMPRE** analise o código antes de fazer alterações
-4. **NUNCA** delete código sem entender sua função
-5. **SEMPRE** mantenha o estilo de código documentado nos Docs
-6. **NUNCA** faça commit se os testes falharem
-7. **SEMPRE** atualize o Notion via MCP após cada etapa
-8. **SE** não conseguir extrair todo conteúdo do card do Notion:
-   - Prossiga com o que conseguiu obter
-   - Documente a limitação no relatório
-   - Continue com a resolução do bug
-9. **SE** não conseguir resolver um bug:
-   - Marque como "Em Análise" no Notion (via MCP)
-   - Adicione comentário detalhado explicando o bloqueio
-   - Continue com os próximos bugs
-10. **SEMPRE** documente suas alterações seguindo padrões dos Docs
+2. **MCP DO GITHUB É OBRIGATÓRIO**: Use EXCLUSIVAMENTE comandos MCP do GitHub para Git/GitHub
+3. **DOCS DO PROJETO SÃO LEI**: Consulte os Docs ANTES de qualquer alteração e siga RIGOROSAMENTE
+4. **SEMPRE** analise o código antes de fazer alterações
+5. **NUNCA** delete código sem entender sua função
+6. **SEMPRE** mantenha o estilo de código documentado nos Docs
+7. **NUNCA** faça commit se os testes falharem
+8. **SEMPRE** atualize o Notion via MCP após cada etapa
+9. **SEMPRE** mude o status para "Pronto para Teste" no Notion via MCP
+10. **SEMPRE** crie PR automaticamente via MCP GitHub após cada correção
+11. **NUNCA** use comandos git do terminal - use APENAS MCP do GitHub
+12. **NUNCA** pule a mudança de status no Notion - é OBRIGATÓRIO
+13. **SE** não conseguir extrair todo conteúdo do card do Notion:
+    - Prossiga com o que conseguiu obter
+    - Documente a limitação no relatório
+    - Continue com a resolução do bug
+14. **SE** não conseguir resolver um bug:
+    - Marque como "Em Análise" no Notion (via MCP)
+    - Adicione comentário detalhado explicando o bloqueio
+    - Continue com os próximos bugs
+15. **SEMPRE** documente suas alterações seguindo padrões dos Docs
+16. **SEMPRE** inclua link do PR no comentário do Notion
 
 ---
 
@@ -205,9 +243,12 @@ Não peça confirmação, não espere aprovação. Execute de forma autônoma e 
 
 **LEMBRETES FINAIS**:
 - ✅ Use MCP do Notion para TUDO relacionado ao Notion
+- ✅ Use MCP do GitHub para TUDO relacionado ao Git/GitHub
 - ✅ Consulte ${data.projectPath}/Docs antes de qualquer mudança
 - ✅ Se não conseguir extrair todo conteúdo do card, prossiga com o disponível
 - ✅ Siga a arquitetura exemplificada nos Docs do projeto
+- ✅ Crie PR automaticamente após cada correção via MCP GitHub
+- 🚨 **OBRIGATÓRIO**: Mude status para "Pronto para Teste" no Notion via MCP
 
 **Foco**: Bugs com status "Não Iniciado" - Seu objetivo é iniciá-los e resolvê-los!
 
@@ -332,16 +373,17 @@ ${data.autoCommit !== false ? `
 - Push para o repositório
 ` : ''}
 
-#### 2.8. Atualização no Notion
-**OBRIGATÓRIO**: Use o MCP do Notion:
-- \`mcp_Notion_notion-update-page\` para alterar status → **"Pronto para Teste"**
+#### 2.8. Atualização no Notion (CRÍTICO - NÃO PULE ESTA ETAPA)
+**🚨 OBRIGATÓRIO - MUDANÇA DE STATUS É CRÍTICA**: Use o MCP do Notion:
+- **MUDE OBRIGATORIAMENTE** status → **"Pronto para Teste"** via \`mcp_Notion_notion-update-page\`
+- **NÃO PULE** esta etapa - é essencial para o fluxo de trabalho
 - \`mcp_Notion_notion-create-comment\` com comentário DETALHADO:
   * 📝 Resumo do motivo da reprovação
   * ✅ O que foi corrigido nesta versão
   * 📐 Padrões dos Docs que foram seguidos corretamente
   * 🔍 Testes adicionais realizados
   * ⚠️ Pontos específicos para validar no teste
-  ${data.autoCommit !== false ? '* 🔗 Branch e hash do commit' : ''}
+  ${data.autoCommit !== false ? '* 🔗 Branch e hash do commit\n  * 🚀 **LINK DO PULL REQUEST**: [URL do PR criado via MCP GitHub]' : ''}
 
 ### PASSO 3: Relatório Final
 
@@ -360,8 +402,10 @@ Crie um arquivo em \`results/relatorio-reprovados-${Date.now()}.md\` com anális
 7. **SE** a abordagem anterior estava errada, mude completamente a estratégia
 8. **SE** não seguiu os Docs antes, corrija para seguir agora
 9. **SEMPRE** teste os cenários específicos que causaram a reprovação
-10. **DOCUMENTE** claramente o que mudou em relação à versão anterior
-11. **SE** não conseguir extrair todo conteúdo do card:
+10. **SEMPRE** mude o status para "Pronto para Teste" no Notion via MCP
+11. **NUNCA** pule a mudança de status no Notion - é OBRIGATÓRIO
+12. **DOCUMENTE** claramente o que mudou em relação à versão anterior
+13. **SE** não conseguir extrair todo conteúdo do card:
     - Prossiga com o que conseguiu obter
     - Continue com o retrabalho
 
@@ -376,6 +420,7 @@ Bugs reprovados são prioridade! Execute com atenção extra aos detalhes.
 - ✅ Consulte ${data.projectPath}/Docs antes de retrabalhar
 - ✅ Compare implementação anterior com padrões dos Docs
 - ✅ Se não conseguir extrair todo conteúdo, prossiga com o disponível
+- 🚨 **OBRIGATÓRIO**: Mude status para "Pronto para Teste" no Notion via MCP
 
 **Foco**: Entender o motivo da reprovação e corrigir adequadamente seguindo os Docs!
 

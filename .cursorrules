@@ -84,9 +84,52 @@ Quando você ler "CURSOR-EXECUTE-NOW.md" ou um arquivo de INSTRUCTIONS.md:
    - Identifique problemas
    - Implemente correções
    - Valide as mudanças
-   - Faça commits (se configurado)
-   - Atualize status no Notion
+   - **EXECUTE PROTOCOLO OBRIGATÓRIO DE FINALIZAÇÃO** (ver seção abaixo)
    - Gere relatórios em results/
+
+### 🚨 PROTOCOLO OBRIGATÓRIO DE FINALIZAÇÃO DE BUGS
+
+**ANTES DE MARCAR QUALQUER BUG COMO CONCLUÍDO**, você DEVE SEMPRE executar:
+
+#### ✅ CHECKLIST OBRIGATÓRIO DE FINALIZAÇÃO:
+
+1. **📝 COMMIT DAS MUDANÇAS**
+   ```bash
+   git add .
+   git commit -m "fix: [descrição específica do bug corrigido]"
+   ```
+
+2. **🚀 PUSH PARA REPOSITÓRIO**
+   ```bash
+   git push
+   ```
+
+3. **📋 PULL REQUEST** (quando aplicável)
+   - Criar PR com descrição detalhada da correção
+   - Vincular ao bug no Notion
+
+4. **🔄 ATUALIZAR STATUS NO NOTION**
+   - Marcar bug como "Resolvido" ou "Concluído"
+   - Adicionar comentário com detalhes da correção
+   - Incluir link do commit/PR
+
+5. **📊 RELATÓRIO EM RESULTS/**
+   - Gerar arquivo de relatório com:
+     - Bug corrigido
+     - Solução implementada
+     - Arquivos modificados
+     - Link do commit/PR
+
+#### ⚠️ REGRA CRÍTICA:
+**NUNCA** marcar um bug como concluído sem executar **TODAS** essas ações. O usuário enfatizou que às vezes essas etapas são esquecidas, então você deve verificar sistematicamente cada uma antes de qualquer finalização.
+
+#### 🔍 VERIFICAÇÃO FINAL:
+Antes de finalizar qualquer correção, pergunte-se:
+- ✅ Fiz o commit das mudanças?
+- ✅ Fiz o push para o repositório?
+- ✅ Criei o PR (se aplicável)?
+- ✅ Atualizei o status no Notion?
+- ✅ Gerei o relatório em results/?
 
 ### 🔥 REGRAS CRÍTICAS
 
