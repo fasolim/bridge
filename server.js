@@ -265,6 +265,8 @@ async function processBugResolverRequest(requestData) {
       throw new Error(`Projeto "${projectName}" não encontrado. Disponíveis: ${available.map(p => p.name).join(', ')}`);
     }
     console.log(`✅ Projeto encontrado: ${projectPath}`);
+    // Atualiza o requestData com o projectPath encontrado
+    requestData.projectPath = projectPath;
   }
   
   if (!projectPath) {
