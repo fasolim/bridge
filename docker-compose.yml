@@ -10,12 +10,31 @@ services:
       - PORT=3001
       - HOST=0.0.0.0  # Aceita conexões de qualquer IP na rede
       - NOTION_TOKEN=${NOTION_TOKEN}
+      - MONGODB_URI=mongodb://mongodb:27017/bridge_metrics
     volumes:
       - ./projects:/app/projects
       - ./tasks:/app/tasks
       - ./results:/app/results
     restart: unless-stopped
     network_mode: bridge  # Permite acesso da rede local
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7.0
+    container_name: bridge-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=bridge123
+      - MONGO_INITDB_DATABASE=bridge_metrics
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    networks:
+      - bridge_network
 
   # Descomentar se quiser N8N junto
   # n8n:
@@ -31,6 +50,10 @@ services:
   #     - n8n_data:/home/node/.n8n
   #   restart: unless-stopped
 
-# volumes:
-#   n8n_data:
+volumes:
+  mongodb_data:
+
+networks:
+  bridge_network:
+    driver: bridge
 

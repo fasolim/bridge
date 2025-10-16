@@ -1,157 +1,184 @@
-# 🌉 Bridge
+# 🚀 Bridge Metrics - Sistema de Métricas e ML
 
-Ponte automática entre Notion e projetos locais via Cursor AI.
+Sistema completo de métricas e aprendizado de máquina para otimização de resolução de bugs.
 
-## ✨ NOVIDADE: Interface Web!
-
-**Agora com interface visual completa!** Não precisa mais usar Postman! 🎉
-
-Acesse: `http://localhost:3001` após iniciar o servidor.
-
-### 🎯 6 Estratégias de Resolução:
-- 🚀 **Bugs Não Iniciados** - Começa bugs novos do zero
-- 🔄 **Bugs Reprovados** - Retrabalha bugs rejeitados
-- ⚡ **Em Andamento** - Finaliza bugs iniciados
-- 🔥 **Alta Prioridade** - Foca em bugs críticos
-- 📋 **Todos Pendentes** - Limpa o backlog completo
-- ⚙️ **Personalizado** - Filtros customizados
-
-**👉 Guia rápido:** [QUICK-START.md](./QUICK-START.md)  
-**📖 Documentação completa:** [INTERFACE-WEB.md](./INTERFACE-WEB.md)
-
-## Setup
-
-### Local
-```bash
-npm install
-npm start
-```
-
-O servidor iniciará e mostrará dois endereços:
-- **Local**: `http://localhost:3001` (apenas neste PC)
-- **Rede**: `http://192.168.x.x:3001` (outros PCs na rede local)
-
-### Docker
-```bash
-# Criar .env primeiro
-echo "NOTION_TOKEN=seu_token" > .env
-
-# Rodar
-docker-compose up -d
-
-# Logs
-docker-compose logs -f bridge
-```
-
-### 🌐 Acesso na Rede Local
-
-Para receber webhooks de outros computadores na rede:
-
-1. **Configure o Firewall** (apenas uma vez):
-   ```powershell
-   # Execute como Administrador
-   .\configure-firewall.ps1
-   ```
-
-2. **Inicie o servidor**:
-   ```bash
-   npm start
-   ```
-
-3. **Use o IP da rede** para webhooks:
-   ```
-   http://SEU_IP:3001/api/bug-resolver
-   ```
-
-> 📖 Veja detalhes completos em [`CONFIGURACAO-REDE-LOCAL.md`](./CONFIGURACAO-REDE-LOCAL.md)
-
-## Estrutura
+## 📁 Estrutura do Projeto (MVC)
 
 ```
 bridge/
-├── projects/        # Seus repos clonados
-│   └── syntra/
-├── server.js        # API
-├── tasks/           # Tarefas geradas
-└── results/         # Relatórios
+├── src/
+│   ├── controllers/          # Controladores (lógica de negócio)
+│   │   ├── MetricsController.js
+│   │   └── NotionController.js
+│   ├── models/              # Modelos de dados (MongoDB)
+│   │   ├── BugMetrics.js
+│   │   ├── Report.js
+│   │   └── MLConfig.js
+│   ├── routes/              # Rotas da API
+│   │   ├── metrics.js
+│   │   └── notion.js
+│   ├── services/            # Serviços (lógica de negócio)
+│   │   ├── MetricsService.js
+│   │   ├── NotionService.js
+│   │   └── MLService.js
+│   ├── config/              # Configurações
+│   │   ├── database.js
+│   │   └── notion.js
+│   ├── middleware/          # Middleware
+│   │   ├── errorHandler.js
+│   │   └── logger.js
+│   ├── app.js              # Configuração da aplicação
+│   └── server.js           # Servidor principal
+├── scripts/                # Scripts utilitários
+├── public/                 # Arquivos estáticos
+├── docker-compose.yml      # Configuração Docker
+└── package.json
 ```
 
-## API
+## 🚀 Início Rápido
 
-### Interface Web (NOVO! 🎉)
-**Acesse:** `http://localhost:3001`
-
-Interface visual completa com seletor de estratégias e configuração facilitada!
-
-### Endpoints REST
-
-**POST /api/bug-resolver** - Inicia resolução de bugs
-
-Exemplo com estratégia:
-```json
-{
-  "notionDatabaseUrl": "https://notion.so/...",
-  "projectName": "syntra",
-  "subProject": "back",
-  "projectContext": "Backend NestJS",
-  "strategy": "nao-iniciado",
-  "autoCommit": true
-}
+### 1. Instalar Dependências
+```bash
+npm install
 ```
 
-**GET /api/projects** - Lista projetos e subprojetos  
-**GET /api/strategies** - Lista estratégias disponíveis (NOVO!)  
-**GET /api/tasks** - Lista tarefas executadas  
-**GET /api/results** - Lista relatórios gerados
-
-### Estratégias Disponíveis:
-- `nao-iniciado` - Bugs não iniciados
-- `reprovado` - Bugs reprovados
-- `em-andamento` - Bugs em andamento
-- `prioridade-alta` - Apenas bugs críticos/altos
-- `todos-pendentes` - Todos não concluídos
-- `custom` - Filtro personalizado (requer `customFilter`)
-
-## Fluxo
-
-1. Bug criado no Notion → webhook → Bridge
-2. Bridge cria tarefa e **abre automaticamente no Cursor**
-3. Bridge **envia automaticamente para o chat** (via PowerShell)
-4. Cursor AI executa e resolve automaticamente
-5. Relatório gerado em `results/`
-
-> **Auto-execução**: O sistema usa PowerShell para simular Ctrl+L e enviar a mensagem automaticamente!
-
-## Estrutura de Projetos
-
-```
-projects/
-└── syntra/
-    ├── syntrafi-back/   # Backend
-    └── syntrafi-front/  # Frontend
+### 2. Configurar Variáveis de Ambiente
+Crie um arquivo `.env`:
+```env
+NOTION_TOKEN=seu_token_do_notion
+MONGODB_URI=mongodb://localhost:27017/bridge_metrics
+PORT=3001
+HOST=0.0.0.0
 ```
 
-Para referenciar:
-- **Projeto completo**: `"projectName": "syntra"`
-- **Apenas backend**: `"projectName": "syntra", "subProject": "back"`
-- **Apenas frontend**: `"projectName": "syntra", "subProject": "front"`
+### 3. Iniciar o Sistema
+```bash
+# Iniciar MongoDB
+npm run docker:up
 
-## Docker
+# Iniciar API
+npm start
+```
+
+## 📊 Funcionalidades
+
+### 🎯 Sistema de Métricas
+- **Coleta automática** de dados do Notion
+- **Classificação inteligente** de bugs (5 níveis)
+- **Métricas detalhadas** (tokens, custos, tempo)
+- **Relatórios completos** de performance
+
+### 🤖 Aprendizado de Máquina
+- **Otimização automática** de prompts
+- **Escalação inteligente** de bugs
+- **Predição de sucesso** baseada em histórico
+- **Learning rate** adaptativo
+
+### 🔄 Integração Notion
+- **Sincronização automática** de databases
+- **Consumo completo** de dados
+- **Mapeamento inteligente** de propriedades
+- **Suporte a blocos** e conteúdo rico
+
+## 🌐 API Endpoints
+
+### Métricas
+- `GET /api/metrics/dashboard` - Dashboard de estatísticas
+- `GET /api/metrics/bugs` - Listar bugs
+- `POST /api/metrics/bugs` - Criar bug
+- `POST /api/metrics/bugs/:id/attempts` - Adicionar tentativa
+- `GET /api/metrics/reports` - Relatórios
+
+### Notion
+- `GET /api/notion/test` - Testar conexão
+- `GET /api/notion/databases` - Listar databases
+- `POST /api/notion/databases/:id/sync` - Sincronizar database
+- `POST /api/notion/databases/:id/consume` - Consumir database
+
+## 🎯 Como Usar
+
+### 1. Testar Conexão
+```bash
+curl http://localhost:3001/api/notion/test
+```
+
+### 2. Sincronizar Database
+```bash
+curl -X POST http://localhost:3001/api/notion/databases/SEU_DATABASE_ID/sync
+```
+
+### 3. Ver Dashboard
+```bash
+curl http://localhost:3001/api/metrics/dashboard
+```
+
+## 🔧 Configuração
+
+### Notion
+1. Crie uma integração no Notion
+2. Compartilhe seu database com a integração
+3. Configure o token no `.env`
+
+### MongoDB
+- **Docker**: `docker-compose up -d`
+- **Local**: Instale MongoDB localmente
+- **Cloud**: Use MongoDB Atlas
+
+## 📈 Sistema de Níveis
+
+- **Nível 1**: Bugs simples (typos, estilos)
+- **Nível 2**: Bugs intermediários (funções, validações)
+- **Nível 3**: Bugs complexos (APIs, integrações)
+- **Nível 4**: Bugs críticos (arquitetura, performance)
+- **Nível 5**: Bugs extremamente complexos (sistema)
+
+## 🚀 Scripts Disponíveis
 
 ```bash
-# Build e start
-docker-compose up -d
-
-# Stop
-docker-compose down
-
-# Logs
-docker-compose logs -f
-
-# Rebuild
-docker-compose up -d --build
+npm start          # Iniciar servidor
+npm run dev        # Modo desenvolvimento
+npm run test       # Executar testes
+npm run docker:up  # Iniciar MongoDB
+npm run docker:down # Parar MongoDB
 ```
+
+## 📊 Exemplo de Uso
+
+```javascript
+// Criar bug
+const bug = await fetch('/api/metrics/bugs', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    notionBugId: 'bug-123',
+    bugTitle: 'Botão não funciona',
+    bugDescription: 'O botão de login não responde'
+  })
+});
+
+// Adicionar tentativa
+await fetch(`/api/metrics/bugs/${bug.id}/attempts`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    promptUsed: 'Analise e corrija o bug...',
+    tokensUsed: 1500,
+    cost: 0.003,
+    executionTime: 120,
+    success: true
+  })
+});
+```
+
+## 🎉 Benefícios
+
+- **Métricas detalhadas** de todos os bugs
+- **Aprendizado contínuo** de padrões de sucesso
+- **Otimização automática** de prompts
+- **Escalação inteligente** de bugs complexos
+- **Relatórios completos** de performance
+- **Predição de custos** e tempo de resolução
 
 ---
 
-**Porta padrão**: 3001
+**🚀 Sistema pronto para otimizar a resolução de bugs com aprendizado de máquina!**

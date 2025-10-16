@@ -1,0 +1,410 @@
+{
+  "bugs": [
+    {
+      "id": "bug_28ecd984590f806eaa85ceb72a6e816c-page-1",
+      "notionBugId": "28ecd984590f806eaa85ceb72a6e816c-page-1",
+      "notionUrl": "https://www.notion.so/28ecd984590f806eaa85ceb72a6e816c-page-1",
+      "title": "Botão de login não funciona",
+      "description": "O botão de login na página principal não responde quando clicado. Usuários não conseguem fazer login no sistema.",
+      "bugLevel": 1,
+      "status": "in_progress",
+      "priority": "High",
+      "assignee": "Bug Resolver",
+      "tags": "frontend,login,ui",
+      "attempts": [],
+      "totalAttempts": 0,
+      "totalTokens": 0,
+      "totalCost": 0,
+      "totalExecutionTime": 0,
+      "createdAt": "2025-10-14T19:15:05.065Z",
+      "updatedAt": "2025-10-15T19:15:05.065Z",
+      "resolvedAt": null,
+      "rawData": {
+        "id": "28ecd984590f806eaa85ceb72a6e816c-page-1",
+        "url": "https://www.notion.so/28ecd984590f806eaa85ceb72a6e816c-page-1",
+        "properties": {
+          "Title": {
+            "value": "Botão de login não funciona",
+            "type": "title"
+          },
+          "Description": {
+            "value": "O botão de login na página principal não responde quando clicado. Usuários não conseguem fazer login no sistema.",
+            "type": "rich_text"
+          },
+          "Status": {
+            "value": "In Progress",
+            "type": "select"
+          },
+          "Priority": {
+            "value": "High",
+            "type": "select"
+          },
+          "Assignee": {
+            "value": "Bug Resolver",
+            "type": "people"
+          },
+          "Tags": {
+            "value": "frontend,login,ui",
+            "type": "multi_select"
+          },
+          "Created": {
+            "value": "2025-10-14T19:15:05.065Z",
+            "type": "created_time"
+          },
+          "Updated": {
+            "value": "2025-10-15T19:15:05.065Z",
+            "type": "last_edited_time"
+          }
+        },
+        "blocks": [
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-1",
+            "type": "paragraph",
+            "content": {
+              "text": "Este é um bug crítico que afeta a funcionalidade principal do sistema. O botão de login está localizado no canto superior direito da página principal."
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-2",
+            "type": "bulleted_list_item",
+            "content": {
+              "text": "Usuários não conseguem fazer login"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-3",
+            "type": "bulleted_list_item",
+            "content": {
+              "text": "Botão não responde a cliques"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-4",
+            "type": "code",
+            "content": {
+              "code": "function handleLogin() {\n  // Código do botão de login\n  console.log(\"Login clicked\");\n}",
+              "language": "javascript"
+            }
+          }
+        ]
+      },
+      "blocks": [
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-1",
+          "type": "paragraph",
+          "content": {
+            "text": "Este é um bug crítico que afeta a funcionalidade principal do sistema. O botão de login está localizado no canto superior direito da página principal."
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-2",
+          "type": "bulleted_list_item",
+          "content": {
+            "text": "Usuários não conseguem fazer login"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-3",
+          "type": "bulleted_list_item",
+          "content": {
+            "text": "Botão não responde a cliques"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-4",
+          "type": "code",
+          "content": {
+            "code": "function handleLogin() {\n  // Código do botão de login\n  console.log(\"Login clicked\");\n}",
+            "language": "javascript"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bug_28ecd984590f806eaa85ceb72a6e816c-page-2",
+      "notionBugId": "28ecd984590f806eaa85ceb72a6e816c-page-2",
+      "notionUrl": "https://www.notion.so/28ecd984590f806eaa85ceb72a6e816c-page-2",
+      "title": "Erro na validação de formulário",
+      "description": "O formulário de cadastro não valida corretamente os campos obrigatórios. Permite submissão com dados inválidos.",
+      "bugLevel": 2,
+      "status": "pending",
+      "priority": "Medium",
+      "assignee": "",
+      "tags": "validation,form,backend",
+      "attempts": [],
+      "totalAttempts": 0,
+      "totalTokens": 0,
+      "totalCost": 0,
+      "totalExecutionTime": 0,
+      "createdAt": "2025-10-13T19:15:05.065Z",
+      "updatedAt": "2025-10-13T19:15:05.065Z",
+      "resolvedAt": null,
+      "rawData": {
+        "id": "28ecd984590f806eaa85ceb72a6e816c-page-2",
+        "url": "https://www.notion.so/28ecd984590f806eaa85ceb72a6e816c-page-2",
+        "properties": {
+          "Title": {
+            "value": "Erro na validação de formulário",
+            "type": "title"
+          },
+          "Description": {
+            "value": "O formulário de cadastro não valida corretamente os campos obrigatórios. Permite submissão com dados inválidos.",
+            "type": "rich_text"
+          },
+          "Status": {
+            "value": "Pending",
+            "type": "select"
+          },
+          "Priority": {
+            "value": "Medium",
+            "type": "select"
+          },
+          "Assignee": {
+            "value": "",
+            "type": "people"
+          },
+          "Tags": {
+            "value": "validation,form,backend",
+            "type": "multi_select"
+          },
+          "Created": {
+            "value": "2025-10-13T19:15:05.065Z",
+            "type": "created_time"
+          },
+          "Updated": {
+            "value": "2025-10-13T19:15:05.065Z",
+            "type": "last_edited_time"
+          }
+        },
+        "blocks": [
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-5",
+            "type": "paragraph",
+            "content": {
+              "text": "O formulário de cadastro está localizado em /register e contém os seguintes campos:"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-6",
+            "type": "numbered_list_item",
+            "content": {
+              "text": "Nome (obrigatório)"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-7",
+            "type": "numbered_list_item",
+            "content": {
+              "text": "Email (obrigatório)"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-8",
+            "type": "numbered_list_item",
+            "content": {
+              "text": "Senha (obrigatório)"
+            }
+          }
+        ]
+      },
+      "blocks": [
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-5",
+          "type": "paragraph",
+          "content": {
+            "text": "O formulário de cadastro está localizado em /register e contém os seguintes campos:"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-6",
+          "type": "numbered_list_item",
+          "content": {
+            "text": "Nome (obrigatório)"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-7",
+          "type": "numbered_list_item",
+          "content": {
+            "text": "Email (obrigatório)"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-8",
+          "type": "numbered_list_item",
+          "content": {
+            "text": "Senha (obrigatório)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bug_28ecd984590f806eaa85ceb72a6e816c-page-3",
+      "notionBugId": "28ecd984590f806eaa85ceb72a6e816c-page-3",
+      "notionUrl": "https://www.notion.so/28ecd984590f806eaa85ceb72a6e816c-page-3",
+      "title": "Falha na integração com API externa",
+      "description": "A integração com a API de pagamento está falhando. Transações não são processadas corretamente.",
+      "bugLevel": 3,
+      "status": "escalated",
+      "priority": "Critical",
+      "assignee": "Senior Developer",
+      "tags": "api,payment,integration",
+      "attempts": [],
+      "totalAttempts": 0,
+      "totalTokens": 0,
+      "totalCost": 0,
+      "totalExecutionTime": 0,
+      "createdAt": "2025-10-11T19:15:05.065Z",
+      "updatedAt": "2025-10-15T19:15:05.065Z",
+      "resolvedAt": null,
+      "rawData": {
+        "id": "28ecd984590f806eaa85ceb72a6e816c-page-3",
+        "url": "https://www.notion.so/28ecd984590f806eaa85ceb72a6e816c-page-3",
+        "properties": {
+          "Title": {
+            "value": "Falha na integração com API externa",
+            "type": "title"
+          },
+          "Description": {
+            "value": "A integração com a API de pagamento está falhando. Transações não são processadas corretamente.",
+            "type": "rich_text"
+          },
+          "Status": {
+            "value": "Escalated",
+            "type": "select"
+          },
+          "Priority": {
+            "value": "Critical",
+            "type": "select"
+          },
+          "Assignee": {
+            "value": "Senior Developer",
+            "type": "people"
+          },
+          "Tags": {
+            "value": "api,payment,integration",
+            "type": "multi_select"
+          },
+          "Created": {
+            "value": "2025-10-11T19:15:05.065Z",
+            "type": "created_time"
+          },
+          "Updated": {
+            "value": "2025-10-15T19:15:05.065Z",
+            "type": "last_edited_time"
+          }
+        },
+        "blocks": [
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-9",
+            "type": "paragraph",
+            "content": {
+              "text": "Este é um bug crítico que afeta o processamento de pagamentos. A integração com a API externa está retornando erros 500."
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-10",
+            "type": "code",
+            "content": {
+              "code": "POST /api/payments\n{\n  \"amount\": 100,\n  \"currency\": \"USD\"\n}\n\nResponse: 500 Internal Server Error",
+              "language": "json"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-11",
+            "type": "paragraph",
+            "content": {
+              "text": "Logs do servidor mostram:"
+            }
+          },
+          {
+            "id": "28ecd984590f806eaa85ceb72a6e816c-block-12",
+            "type": "code",
+            "content": {
+              "code": "ERROR: Connection timeout to payment API\nERROR: Failed to process payment\nERROR: Transaction rolled back",
+              "language": "text"
+            }
+          }
+        ]
+      },
+      "blocks": [
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-9",
+          "type": "paragraph",
+          "content": {
+            "text": "Este é um bug crítico que afeta o processamento de pagamentos. A integração com a API externa está retornando erros 500."
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-10",
+          "type": "code",
+          "content": {
+            "code": "POST /api/payments\n{\n  \"amount\": 100,\n  \"currency\": \"USD\"\n}\n\nResponse: 500 Internal Server Error",
+            "language": "json"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-11",
+          "type": "paragraph",
+          "content": {
+            "text": "Logs do servidor mostram:"
+          }
+        },
+        {
+          "id": "28ecd984590f806eaa85ceb72a6e816c-block-12",
+          "type": "code",
+          "content": {
+            "code": "ERROR: Connection timeout to payment API\nERROR: Failed to process payment\nERROR: Transaction rolled back",
+            "language": "text"
+          }
+        }
+      ]
+    }
+  ],
+  "reports": [],
+  "mlConfig": {
+    "promptTemplates": [
+      {
+        "level": 1,
+        "template": "Analise e corrija o seguinte bug: {bugDescription}. Forneça uma solução simples e direta.",
+        "successRate": 0,
+        "usageCount": 0
+      },
+      {
+        "level": 2,
+        "template": "Este é um bug de nível intermediário. Analise cuidadosamente: {bugDescription}. Considere múltiplas abordagens e escolha a melhor.",
+        "successRate": 0,
+        "usageCount": 0
+      },
+      {
+        "level": 3,
+        "template": "Bug complexo detectado: {bugDescription}. Realize análise detalhada, identifique dependências e forneça solução robusta.",
+        "successRate": 0,
+        "usageCount": 0
+      },
+      {
+        "level": 4,
+        "template": "Bug crítico de alto nível: {bugDescription}. Análise arquitetural necessária. Considere impacto em todo o sistema.",
+        "successRate": 0,
+        "usageCount": 0
+      },
+      {
+        "level": 5,
+        "template": "Bug extremamente complexo: {bugDescription}. Requer análise profunda, refatoração e testes extensivos. Abordagem sistemática necessária.",
+        "successRate": 0,
+        "usageCount": 0
+      }
+    ],
+    "escalationRules": [
+      {
+        "condition": "attempts > 2",
+        "action": "increase_level",
+        "parameters": {
+          "increment": 1
+        }
+      }
+    ],
+    "learningRate": 0.1,
+    "lastUpdated": "2025-10-16T19:15:05.069Z"
+  }
+}
