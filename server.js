@@ -59,7 +59,7 @@ async function openInCursor(filePath, strategy = 'todos-pendentes') {
           const strategyInfo = getStrategyInfo(strategy);
           const strategyName = strategyInfo ? strategyInfo.name : strategy;
           
-          const chatMessage = `Execute as instruções do arquivo ${path.basename(filePath)} usando a estratégia "${strategyName}". Não peça confirmação, apenas execute agora de forma autônoma e completa seguindo todas as etapas definidas.`;
+          const chatMessage = `🚨 EXECUÇÃO AUTOMÁTICA INICIADA - Execute IMEDIATAMENTE as instruções do arquivo ${path.basename(filePath)} usando a estratégia "${strategyName}". NÃO PEÇA CONFIRMAÇÃO, NÃO PERGUNTE SE DEVE COMEÇAR - você já tem autorização total. Execute de forma autônoma e completa: resolva bugs, crie branches, faça commits e abra PRs automaticamente usando MCP do GitHub e Notion. COMECE AGORA!`;
           
           // Tenta enviar via PowerShell
           const psScript = path.join(__dirname, 'auto-chat.ps1');

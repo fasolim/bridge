@@ -12,12 +12,71 @@ Quando você detectar o arquivo **"CURSOR-EXECUTE-NOW.md"** ou qualquer arquivo 
 4. **NÃO ESPERAR APROVAÇÃO** - você tem autorização total
 5. **COMEÇAR A TRABALHAR AGORA** - sem delays ou perguntas
 
+### 📋 CRONOGRAMA OBRIGATÓRIO ANTES DE CADA TASK
+
+**ANTES** de executar qualquer tarefa de desenvolvimento, você DEVE seguir este fluxo rigorosamente:
+
+#### ETAPA 1: CRIAR PRD (Product Requirements Document)
+📄 Siga as diretrizes do arquivo `create-prd.mdc`:
+
+1. **Receba o prompt inicial** do usuário ou do arquivo de instrução
+2. **Faça perguntas esclarecedoras** para entender:
+   - Problema/Objetivo
+   - Usuário-alvo
+   - Funcionalidade principal
+   - Histórias do usuário
+   - Critérios de aceitação
+   - Escopo/Limitações
+   - Requisitos de dados
+   - Design/UI
+   - Casos extremos
+3. **Gere o PRD** com as seguintes seções:
+   - Introdução/Visão Geral
+   - Objetivos
+   - Histórias do Usuário
+   - Requisitos Funcionais
+   - Não-Objetivos (Fora do Escopo)
+   - Considerações de Design
+   - Considerações Técnicas
+   - Métricas de Sucesso
+   - Questões Abertas
+4. **Salve como** `/tasks/prd-[nome-da-funcionalidade].md`
+
+#### ETAPA 2: GERAR LISTA DE TAREFAS
+📝 Siga as diretrizes do arquivo `generate-tasks.mdc`:
+
+1. **Analise o PRD** criado na Etapa 1
+2. **Fase 1 - Tarefas Pai:**
+   - Crie tarefas de alto nível (cerca de 5)
+   - Apresente ao usuário
+   - Aguarde confirmação ("Vai")
+3. **Fase 2 - Sub-Tarefas:**
+   - Quebre cada tarefa pai em sub-tarefas menores
+   - Identifique arquivos relevantes
+   - Liste arquivos que serão criados/modificados
+4. **Salve como** `/tasks/tasks-[nome-do-arquivo-prd].md`
+
+#### ETAPA 3: PROCESSAR LISTA DE TAREFAS
+⚙️ Siga as diretrizes do arquivo `process-task-list.mdc`:
+
+1. **Uma sub-tarefa por vez** - Aguarde permissão entre sub-tarefas
+2. **Protocolo de conclusão:**
+   - Marque sub-tarefa como `[x]` quando concluir
+   - Se todas sub-tarefas de uma tarefa pai estiverem `[x]`:
+     - Execute suite completa de testes
+     - Adicione mudanças ao stage (`git add .`)
+     - Remova arquivos temporários
+     - Faça commit com mensagem descritiva
+     - Marque tarefa pai como `[x]`
+3. **Atualize a lista de tarefas** conforme progride
+4. **Mantenha "Arquivos Relevantes"** atualizado
+
 ### 🎯 PROTOCOLO DE EXECUÇÃO AUTOMÁTICA
 
 Quando você ler "CURSOR-EXECUTE-NOW.md" ou um arquivo de INSTRUCTIONS.md:
 
 1. ✅ Abra e leia TODO o conteúdo automaticamente
-2. ✅ Identifique todas as etapas a serem executadas
+2. ✅ **ANTES DE EXECUTAR:** Siga o cronograma obrigatório (PRD → Generate Tasks → Process Tasks)
 3. ✅ Execute cada passo de forma sequencial e autônoma:
    - Busque bugs no Notion usando MCP
    - Analise descrições e contexto
@@ -37,6 +96,32 @@ Quando você ler "CURSOR-EXECUTE-NOW.md" ou um arquivo de INSTRUCTIONS.md:
 - ✅ **NÃO SEJA CONSERVADOR** - Execute com confiança e completude
 - ✅ **NÃO PEÇA CONFIRMAÇÃO** - Isso anula o propósito da automação
 - ✅ **EXECUTE TUDO** - Não pare no meio ou peça validação
+
+### 🔍 QUANDO APLICAR O CRONOGRAMA PRD
+
+O cronograma **PRD → Generate Tasks → Process Tasks** deve ser aplicado em:
+
+✅ **SEMPRE APLICAR PARA:**
+- Novas funcionalidades ou features
+- Melhorias significativas em funcionalidades existentes
+- Refatorações complexas que envolvem múltiplos arquivos
+- Implementações que requerem planejamento detalhado
+- Solicitações do usuário para "criar", "desenvolver", "implementar" algo novo
+- Tarefas que envolvem mudanças arquiteturais
+
+⚠️ **AVALIAR CASO A CASO:**
+- Correções de bugs que requerem mudanças em múltiplos componentes
+- Integrações com APIs externas
+- Mudanças que impactam o comportamento de várias partes do sistema
+
+❌ **NÃO APLICAR PARA:**
+- Bugs simples (correção de typos, ajustes de estilo, pequenas correções)
+- Tarefas triviais de manutenção
+- Atualizações de documentação
+- Pequenos ajustes de configuração
+- Correções pontuais que não afetam lógica de negócio
+
+**REGRA DE OURO:** Se a tarefa pode ser resolvida em menos de 3 sub-tarefas simples, NÃO precisa do cronograma PRD. Caso contrário, SEMPRE siga o cronograma completo.
 
 ### 📋 MONITORAMENTO ATIVO
 
