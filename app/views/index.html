@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌉 Bridge - Teste de Integração Notion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🌉 Bridge</h1>
+                <p class="subtitle">Sistema de Métricas e Integração com Notion</p>
+            </div>
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Conectado</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Notion Integration Test -->
+            <section class="card notion-test-section">
+                <h2>🔗 Teste de Integração Notion</h2>
+                <div class="notion-test-form">
+                    <div class="form-group">
+                        <label for="notionUrl">
+                            <span class="label-icon">📊</span>
+                            URL do Database do Notion
+                        </label>
+                        <input 
+                            type="url" 
+                            id="notionUrl" 
+                            placeholder="https://notion.so/abc123def456..."
+                            required
+                        >
+                        <small class="form-hint">Cole a URL completa do database de bugs do Notion</small>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeBlocks" checked>
+                            <span class="checkbox-custom"></span>
+                            <span>Incluir blocos das páginas</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="syncToDatabase" checked>
+                            <span class="checkbox-custom"></span>
+                            <span>Sincronizar com MongoDB</span>
+                        </label>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" id="testNotionBtn">
+                        <span class="btn-icon">🔍</span>
+                        Testar Integração Notion
+                    </button>
+                </div>
+                
+                <div id="notionResults" class="results-container" style="display: none;">
+                    <h3>📊 Resultados da Integração</h3>
+                    <div id="notionResultsContent"></div>
+                </div>
+            </section>
+
+            <!-- Strategy Selector -->
+            <section class="card strategy-section">
+                <h2>🎯 Estratégia de Resolução</h2>
+                <div class="strategy-selector">
+                    <div class="strategy-option" data-strategy="nao-iniciado">
+                        <div class="strategy-icon">🚀</div>
+                        <div class="strategy-info">
+                            <h3>Bugs Não Iniciados</h3>
+                            <p>Resolve todos os bugs com status "Não Iniciado"</p>
+                        </div>
+                    </div>
+
+                    <div class="strategy-option" data-strategy="reprovado">
+                        <div class="strategy-icon">🔄</div>
+                        <div class="strategy-info">
+                            <h3>Bugs Reprovados</h3>
+                            <p>Retrabalha bugs que foram reprovados em testes</p>
+                        </div>
+                    </div>
+
+                    <div class="strategy-option" data-strategy="em-andamento">
+                        <div class="strategy-icon">⚡</div>
+                        <div class="strategy-info">
+                            <h3>Bugs Em Andamento</h3>
+                            <p>Continua bugs que já foram iniciados</p>
+                        </div>
+                    </div>
+
+                    <div class="strategy-option" data-strategy="prioridade-alta">
+                        <div class="strategy-icon">🔥</div>
+                        <div class="strategy-info">
+                            <h3>Alta Prioridade</h3>
+                            <p>Foca apenas em bugs críticos e urgentes</p>
+                        </div>
+                    </div>
+
+                    <div class="strategy-option" data-strategy="todos-pendentes">
+                        <div class="strategy-icon">📋</div>
+                        <div class="strategy-info">
+                            <h3>Todos os Pendentes</h3>
+                            <p>Resolve todos os bugs não concluídos</p>
+                        </div>
+                    </div>
+
+                    <div class="strategy-option" data-strategy="custom">
+                        <div class="strategy-icon">⚙️</div>
+                        <div class="strategy-info">
+                            <h3>Personalizado</h3>
+                            <p>Define filtros customizados no Notion</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuration Form -->
+            <section class="card config-section">
+                <h2>⚙️ Configuração</h2>
+                <form id="configForm">
+                    <!-- Notion Database -->
+                    <div class="form-group">
+                        <label for="notionDatabaseUrl">
+                            <span class="label-icon">📊</span>
+                            URL do Database do Notion
+                        </label>
+                        <input 
+                            type="url" 
+                            id="notionDatabaseUrl" 
+                            name="notionDatabaseUrl"
+                            placeholder="https://notion.so/workspace/database-id"
+                            required
+                        >
+                        <small class="form-hint">Cole a URL completa do database de bugs</small>
+                    </div>
+
+                    <!-- Project Selection -->
+                    <div class="form-group">
+                        <label for="projectName">
+                            <span class="label-icon">📁</span>
+                            Projeto
+                        </label>
+                        <select id="projectName" name="projectName" required>
+                            <option value="">Carregando...</option>
+                        </select>
+                        <small class="form-hint">O sistema vai buscar automaticamente a arquitetura nos Docs do projeto</small>
+                    </div>
+
+                    <!-- GitHub Repo -->
+                    <div class="form-group">
+                        <label for="githubRepo">
+                            <span class="label-icon">🌐</span>
+                            Repositório GitHub (opcional)
+                        </label>
+                        <input 
+                            type="url" 
+                            id="githubRepo" 
+                            name="githubRepo"
+                            placeholder="https://github.com/user/repo"
+                        >
+                    </div>
+
+                    <!-- Custom Filter (only for custom strategy) -->
+                    <div class="form-group" id="customFilterGroup" style="display: none;">
+                        <label for="customFilter">
+                            <span class="label-icon">🔍</span>
+                            Filtro Personalizado
+                        </label>
+                        <textarea 
+                            id="customFilter" 
+                            name="customFilter"
+                            rows="3"
+                            placeholder='Ex: Status = "Em Revisão" AND Prioridade = "Média"'
+                        ></textarea>
+                        <small class="form-hint">Defina condições específicas para busca no Notion</small>
+                    </div>
+
+                    <!-- Auto Commit -->
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoCommit" name="autoCommit" checked>
+                            <span class="checkbox-custom"></span>
+                            <span>Fazer commit automático no GitHub</span>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="btn-icon">🚀</span>
+                        Iniciar Resolução Automática
+                    </button>
+                </form>
+            </section>
+
+            <!-- Results Section -->
+            <section class="card results-section" id="resultsSection" style="display: none;">
+                <h2>📊 Resultado</h2>
+                <div id="resultsContent"></div>
+            </section>
+
+            <!-- System Tests -->
+            <section class="card system-tests-section">
+                <h2>🧪 Testes do Sistema</h2>
+                <div class="test-buttons">
+                    <button type="button" class="btn btn-secondary" id="testConnectionBtn">
+                        <span class="btn-icon">🔌</span>
+                        Testar Conexão Notion
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" id="testHealthBtn">
+                        <span class="btn-icon">❤️</span>
+                        Health Check
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" id="collectGitMetricsBtn">
+                        <span class="btn-icon">📊</span>
+                        Coletar Métricas Git
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" id="runMLLearningBtn">
+                        <span class="btn-icon">🤖</span>
+                        Executar ML Learning
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" id="generateReportBtn">
+                        <span class="btn-icon">📈</span>
+                        Gerar Relatório
+                    </button>
+                </div>
+                
+                <div id="systemTestResults" class="results-container" style="display: none;">
+                    <h3>📊 Resultados dos Testes</h3>
+                    <div id="systemTestResultsContent"></div>
+                </div>
+            </section>
+
+            <!-- Metrics Dashboard -->
+            <section class="card metrics-dashboard-section">
+                <h2>📊 Dashboard de Métricas</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">🐛</div>
+                        <div class="metric-info">
+                            <h3 id="totalBugs">-</h3>
+                            <p>Total de Bugs</p>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">✅</div>
+                        <div class="metric-info">
+                            <h3 id="resolvedBugs">-</h3>
+                            <p>Bugs Resolvidos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">📈</div>
+                        <div class="metric-info">
+                            <h3 id="successRate">-</h3>
+                            <p>Taxa de Sucesso</p>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-info">
+                            <h3 id="totalCost">-</h3>
+                            <p>Custo Total</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-secondary" id="refreshMetricsBtn">
+                    <span class="btn-icon">🔄</span>
+                    Atualizar Métricas
+                </button>
+            </section>
+
+            <!-- Recent Tasks -->
+            <section class="card tasks-section">
+                <div class="section-header">
+                    <h2>📋 Tarefas Recentes</h2>
+                    <button class="btn btn-secondary btn-sm" id="refreshTasksBtn">
+                        <span class="btn-icon">🔄</span>
+                        Atualizar
+                    </button>
+                </div>
+                <div id="tasksList" class="tasks-list">
+                    <div class="loading">Carregando tarefas...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Bridge v2.0 - Sistema de Automação de Bug Fixing | Powered by Team Bpix </p>[
+            <p>Fasolim - Clever</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

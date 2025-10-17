@@ -1,41 +1,48 @@
-# 🚀 Bridge Metrics - Sistema de Métricas e ML
+# 🚀 Bridge - Sistema de Métricas e Integração Notion
 
-Sistema completo de métricas e aprendizado de máquina para otimização de resolução de bugs.
+Sistema automatizado de ponte entre Notion e projetos locais via Cursor AI, com foco em métricas de bugs e aprendizado de máquina.
 
-## 📁 Estrutura do Projeto (MVC)
+## 📋 Funcionalidades
+
+- ✅ **Integração Notion**: Extração automática de bugs via MCP
+- ✅ **Métricas ML**: Análise de complexidade e predição de sucesso
+- ✅ **Dashboard**: Interface web para visualização de métricas
+- ✅ **API REST**: Endpoints para integração e automação
+- ✅ **MongoDB**: Armazenamento estruturado de dados
+
+## 🏗️ Estrutura do Projeto
 
 ```
 bridge/
-├── src/
-│   ├── controllers/          # Controladores (lógica de negócio)
-│   │   ├── MetricsController.js
-│   │   └── NotionController.js
-│   ├── models/              # Modelos de dados (MongoDB)
-│   │   ├── BugMetrics.js
-│   │   ├── Report.js
-│   │   └── MLConfig.js
-│   ├── routes/              # Rotas da API
-│   │   ├── metrics.js
-│   │   └── notion.js
-│   ├── services/            # Serviços (lógica de negócio)
-│   │   ├── MetricsService.js
-│   │   ├── NotionService.js
-│   │   └── MLService.js
-│   ├── config/              # Configurações
-│   │   ├── database.js
-│   │   └── notion.js
-│   ├── middleware/          # Middleware
-│   │   ├── errorHandler.js
-│   │   └── logger.js
-│   ├── app.js              # Configuração da aplicação
-│   └── server.js           # Servidor principal
-├── scripts/                # Scripts utilitários
-├── public/                 # Arquivos estáticos
-├── docker-compose.yml      # Configuração Docker
-└── package.json
+├── src/                    # Código fonte principal
+│   ├── config/            # Configurações (database, notion)
+│   ├── controllers/       # Controladores da API
+│   ├── middleware/        # Middlewares (error, logger)
+│   ├── models/           # Modelos MongoDB (BugMetrics, MLConfig, Report)
+│   ├── routes/           # Rotas da API
+│   ├── services/         # Serviços (Metrics, ML, Notion)
+│   ├── app.js            # Configuração Express
+│   └── server.js         # Servidor principal
+├── scripts/              # Scripts de processamento
+│   ├── process-notion-bugs.js    # Processamento de bugs do Notion
+│   ├── git-metrics-collector.js  # Coleta de métricas Git
+│   └── ml-learning-system.js     # Sistema de ML
+├── public/               # Interface web
+│   ├── index.html        # Página principal
+│   ├── app.js           # JavaScript frontend
+│   └── styles.css       # Estilos CSS
+├── mongo-init/          # Inicialização MongoDB
+│   └── init-metrics.js  # Script de setup do banco
+├── notion-data/         # Dados extraídos do Notion
+│   └── extracted-bugs-report.md  # Relatório de bugs
+├── results/             # Relatórios gerados
+│   └── relatorio-integracao-notion-*.md
+├── docker-compose.yml   # Configuração Docker
+├── Dockerfile          # Imagem Docker
+└── package.json        # Dependências e scripts
 ```
 
-## 🚀 Início Rápido
+## 🚀 Instalação e Uso
 
 ### 1. Instalar Dependências
 ```bash
@@ -45,140 +52,81 @@ npm install
 ### 2. Configurar Variáveis de Ambiente
 Crie um arquivo `.env`:
 ```env
-NOTION_TOKEN=seu_token_do_notion
-MONGODB_URI=mongodb://localhost:27017/bridge_metrics
+NOTION_TOKEN=seu_token_notion
+MONGODB_URI=mongodb://bridge_user:bridge_password@localhost:27017/bridge_metrics
 PORT=3001
 HOST=0.0.0.0
 ```
 
-### 3. Iniciar o Sistema
+### 3. Iniciar com Docker
 ```bash
-# Iniciar MongoDB
 npm run docker:up
-
-# Iniciar API
-npm start
 ```
 
-## 📊 Funcionalidades
+### 4. Iniciar Localmente
+```bash
+npm run dev
+```
 
-### 🎯 Sistema de Métricas
-- **Coleta automática** de dados do Notion
-- **Classificação inteligente** de bugs (5 níveis)
-- **Métricas detalhadas** (tokens, custos, tempo)
-- **Relatórios completos** de performance
+## 📊 Scripts Disponíveis
 
-### 🤖 Aprendizado de Máquina
-- **Otimização automática** de prompts
-- **Escalação inteligente** de bugs
-- **Predição de sucesso** baseada em histórico
-- **Learning rate** adaptativo
-
-### 🔄 Integração Notion
-- **Sincronização automática** de databases
-- **Consumo completo** de dados
-- **Mapeamento inteligente** de propriedades
-- **Suporte a blocos** e conteúdo rico
+- `npm start` - Iniciar servidor em produção
+- `npm run dev` - Iniciar servidor em desenvolvimento
+- `npm run process:notion` - Processar bugs do Notion
+- `npm run collect:git` - Coletar métricas Git
+- `npm run ml:learn` - Executar aprendizado de máquina
+- `npm run docker:up` - Subir containers Docker
+- `npm run docker:down` - Parar containers Docker
+- `npm run docker:logs` - Ver logs dos containers
 
 ## 🌐 API Endpoints
 
+### Notion
+- `GET /api/notion/test` - Testar conexão com Notion
+- `GET /api/notion/databases` - Listar databases disponíveis
+- `POST /api/notion/process-link` - Processar link do Notion
+
 ### Métricas
-- `GET /api/metrics/dashboard` - Dashboard de estatísticas
-- `GET /api/metrics/bugs` - Listar bugs
-- `POST /api/metrics/bugs` - Criar bug
-- `POST /api/metrics/bugs/:id/attempts` - Adicionar tentativa
-- `GET /api/metrics/reports` - Relatórios
+- `GET /api/metrics/bugs` - Listar todos os bugs
+- `GET /api/metrics/dashboard` - Dashboard de métricas
+- `GET /api/health` - Status da API
 
-### Notion
-- `GET /api/notion/test` - Testar conexão
-- `GET /api/notion/databases` - Listar databases
-- `POST /api/notion/databases/:id/sync` - Sincronizar database
-- `POST /api/notion/databases/:id/consume` - Consumir database
+## 🎯 Interface Web
 
-## 🎯 Como Usar
+Acesse `http://localhost:3001` para:
+- Testar integração com Notion
+- Visualizar métricas em tempo real
+- Executar testes do sistema
+- Monitorar dashboard de bugs
 
-### 1. Testar Conexão
-```bash
-curl http://localhost:3001/api/notion/test
-```
+## 🧠 Machine Learning
 
-### 2. Sincronizar Database
-```bash
-curl -X POST http://localhost:3001/api/notion/databases/SEU_DATABASE_ID/sync
-```
+O sistema inclui:
+- **Análise de Complexidade**: Determinação automática de níveis de bug
+- **Predição de Sucesso**: Algoritmos para prever resolução
+- **Otimização de Prompts**: Melhoria baseada em histórico
+- **Escalação Automática**: Identificação de bugs críticos
 
-### 3. Ver Dashboard
-```bash
-curl http://localhost:3001/api/metrics/dashboard
-```
+## 📈 Métricas Coletadas
 
-## 🔧 Configuração
+- **Bugs**: Título, descrição, status, nível de complexidade
+- **Tentativas**: Prompts usados, tokens, custo, tempo de execução
+- **Git**: Commits, PRs, branches relacionadas
+- **ML**: Features, probabilidade de sucesso, histórico de aprendizado
 
-### Notion
-1. Crie uma integração no Notion
-2. Compartilhe seu database com a integração
-3. Configure o token no `.env`
+## 🔧 Configuração MongoDB
 
-### MongoDB
-- **Docker**: `docker-compose up -d`
-- **Local**: Instale MongoDB localmente
-- **Cloud**: Use MongoDB Atlas
+O sistema cria automaticamente:
+- Database: `bridge_metrics`
+- Collections: `bugmetrics`, `reports`, `mlconfigs`
+- Usuário: `bridge_user` com senha `bridge_password`
+- Índices otimizados para performance
 
-## 📈 Sistema de Níveis
+## 📝 Licença
 
-- **Nível 1**: Bugs simples (typos, estilos)
-- **Nível 2**: Bugs intermediários (funções, validações)
-- **Nível 3**: Bugs complexos (APIs, integrações)
-- **Nível 4**: Bugs críticos (arquitetura, performance)
-- **Nível 5**: Bugs extremamente complexos (sistema)
-
-## 🚀 Scripts Disponíveis
-
-```bash
-npm start          # Iniciar servidor
-npm run dev        # Modo desenvolvimento
-npm run test       # Executar testes
-npm run docker:up  # Iniciar MongoDB
-npm run docker:down # Parar MongoDB
-```
-
-## 📊 Exemplo de Uso
-
-```javascript
-// Criar bug
-const bug = await fetch('/api/metrics/bugs', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    notionBugId: 'bug-123',
-    bugTitle: 'Botão não funciona',
-    bugDescription: 'O botão de login não responde'
-  })
-});
-
-// Adicionar tentativa
-await fetch(`/api/metrics/bugs/${bug.id}/attempts`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    promptUsed: 'Analise e corrija o bug...',
-    tokensUsed: 1500,
-    cost: 0.003,
-    executionTime: 120,
-    success: true
-  })
-});
-```
-
-## 🎉 Benefícios
-
-- **Métricas detalhadas** de todos os bugs
-- **Aprendizado contínuo** de padrões de sucesso
-- **Otimização automática** de prompts
-- **Escalação inteligente** de bugs complexos
-- **Relatórios completos** de performance
-- **Predição de custos** e tempo de resolução
+MIT License - Bridge Team
 
 ---
 
-**🚀 Sistema pronto para otimizar a resolução de bugs com aprendizado de máquina!**
+**Versão**: 2.0.0  
+**Última Atualização**: 2025-10-17
